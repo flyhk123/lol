@@ -3,38 +3,37 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
-  data: {
-    type: Array as any,
-    default: [] as any[],
-  },
-  tableColumns: {
-    type: Array,
-    default: [] as any[],
-  },
+    data: {
+        type: Array as any,
+        default: [] as any[],
+    },
+    tableColumns: {
+        type: Array,
+        default: [] as any[],
+    },
 })
 const { t } = useI18n()
 const dataColumns = computed<any[]>(() => {
-  // 不带有actions的列
-  const columns = props.tableColumns.filter((item: any) => !item.actions)
+    // 不带有actions的列
+    const columns = props.tableColumns.filter((item: any) => !item.actions)
 
-  return columns
+    return columns
 })
 
 const actionsColumns = computed<any[]>(() => {
-  // 带有actions的列
-  const columns = props.tableColumns.filter((item: any) => item.actions)
+    // 带有actions的列
+    const columns = props.tableColumns.filter((item: any) => item.actions)
 
-  return columns
+    return columns
 })
 </script>
 
 <template>
   <div class="overflow-x-auto">
-    <table class="table min-w-[600px]">
+    <table class="table min-w-150">
       <!-- head -->
       <thead>
         <tr>
-          <th />
           <th v-for="(item, index) in dataColumns" :key="index">
             {{ item.label }}
           </th>
@@ -47,9 +46,9 @@ const actionsColumns = computed<any[]>(() => {
       <tbody v-if="data.length > 0">
         <!-- row  -->
         <tr v-for="item in data" :key="item.id" class="hover">
-          <th>{{ item.id }}</th>
+          <!-- <th>{{ item.id }}</th> -->
           <td v-for="(column, index) in dataColumns" :key="index">
-            <span v-if="column.formatValue" v-html="column.formatValue(item)"></span>
+            <span v-if="column.formatValue" v-html="column.formatValue(item)" />
             <span v-else>{{ item[column.props] }}</span>
           </td>
           <!-- action -->

@@ -2,12 +2,12 @@
 import { footerList } from './config'
 
 function skip(url: string) {
-  window.open(url)
+    window.open(url)
 }
 </script>
 
 <template>
-  <div class="footer-container">
+  <div class="footer-container h-[280px]">
     <ul class="flex justify-center">
       <li
         v-for="item in footerList.data"

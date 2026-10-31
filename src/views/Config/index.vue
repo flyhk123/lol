@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import dayjs from 'dayjs'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
@@ -8,26 +9,27 @@ const { t } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const menuList = ref<any[]>(configRoutes.children)
+const currentYear = dayjs().year()
 
 function cleanMenuList(menu: any) {
-  const newList = menu
-  for (let i = 0; i < newList.length; i++) {
-    if (newList[i].children) {
-      cleanMenuList(newList[i].children)
+    const newList = menu
+    for (let i = 0; i < newList.length; i++) {
+        if (newList[i].children) {
+            cleanMenuList(newList[i].children)
+        }
+        if (!newList[i].meta) {
+            newList.splice(i, 1)
+            i--
+        }
     }
-    if (!newList[i].meta) {
-      newList.splice(i, 1)
-      i--
-    }
-  }
 
-  return newList
+    return newList
 }
 
 menuList.value = cleanMenuList(menuList.value)
 
 function skip(path: string) {
-  router.push(path)
+    router.push(path)
 }
 </script>
 
@@ -35,7 +37,7 @@ function skip(path: string) {
   <div class="flex min-h-[calc(100%-280px)]">
     <ul class="w-56 m-0 mr-3 min-w-56 menu bg-base-200 pt-14">
       <li v-for="item in menuList" :key="item.name">
-        <details v-if="item.children" open>
+        <details v-if="item.children && !item.meta.hidden" open>
           <summary>{{ item.meta.title }}</summary>
           <ul>
             <li v-for="subItem in item.children" :key="subItem.name">
@@ -60,14 +62,15 @@ function skip(path: string) {
           </ul>
         </details>
         <a
-          v-else :style="item.name === route.name ? 'background-color:rgba(12,12,12,0.2)' : ''"
+          v-else-if="!item.meta.hidden" :style="item.name === route.name ? 'background-color:rgba(12,12,12,0.2)' : ''"
           @click="skip(item.path)"
         >{{ item.meta!.title }}</a>
+        <div v-else />
       </li>
     </ul>
     <router-view class="flex-1 mt-5" />
   </div>
-  <footer class="p-10 rounded footer footer-center bg-base-200 text-base-content">
+  <footer class="p-10 rounded footer footer-center bg-base-200 h-70 flex flex-col gap-4 text-base-content">
     <nav class="grid grid-flow-col gap-4">
       <a class="cursor-pointer link link-hover text-inherit" target="_blank" href="https://1kw20.fun">{{ t('footer.self-reflection') }}</a>
     </nav>
@@ -86,10 +89,10 @@ function skip(path: string) {
       </div>
     </nav>
     <aside>
-      <p class="p-0 m-0">
+      <a class="p-0 m-0 hover:text-primary" href="https://beian.miit.gov.cn/" target="_blank">
         蜀ICP备2021028666号
-      </p>
-      <p>Copyright © 2024 - All right reserved by Log1997</p>
+      </a>
+      <p>Copyright © {{ currentYear }} - All right reserved by <a class="link link-primary" href="https://github.com/LOG1997" target="_blank">log1997</a></p>
     </aside>
   </footer>
 </template>

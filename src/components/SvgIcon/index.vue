@@ -2,22 +2,22 @@
 import { computed } from 'vue'
 
 const props = defineProps({
-  prefix: {
-    type: String,
-    default: 'icon',
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  color: {
-    type: String,
-    default: '#242424',
-  },
-  size: {
-    type: String,
-    default: '24px',
-  },
+    prefix: {
+        type: String,
+        default: 'icon',
+    },
+    name: {
+        type: String,
+        required: true,
+    },
+    color: {
+        type: String,
+        default: '#242424',
+    },
+    size: {
+        type: String,
+        default: '24px',
+    },
 })
 
 const symbolId = computed(() => `#${props.prefix}-${props.name}`)
@@ -36,8 +36,8 @@ const symbolId = computed(() => `#${props.prefix}-${props.name}`)
 
 <style scoped>
 .svg-icon {
-  width: 24px;
-  height: 24px;
+  /* width: 24px;
+  height: 24px; */
   fill: currentColor;
 }
 </style>
